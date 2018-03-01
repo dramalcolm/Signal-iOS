@@ -1,5 +1,5 @@
 //
-//  Copyright (c) 2017 Open Whisper Systems. All rights reserved.
+//  Copyright (c) 2018 Open Whisper Systems. All rights reserved.
 //
 
 import Foundation
@@ -73,9 +73,9 @@ class AccountManager: NSObject {
 
     private func registerForTextSecure(verificationCode: String) -> Promise<Void> {
         return Promise { fulfill, reject in
-            self.textSecureAccountManager.verifyAccount(withCode:verificationCode,
-                                                        success:fulfill,
-                                                        failure:reject)
+            self.textSecureAccountManager.verifyAccount(withCode: verificationCode,
+                                                        success: fulfill,
+                                                        failure: reject)
         }
     }
 
@@ -95,16 +95,16 @@ class AccountManager: NSObject {
 
     func updatePushTokens(pushToken: String, voipToken: String) -> Promise<Void> {
         return Promise { fulfill, reject in
-            self.textSecureAccountManager.registerForPushNotifications(pushToken:pushToken,
-                                                                       voipToken:voipToken,
-                                                                       success:fulfill,
-                                                                       failure:reject)
+            self.textSecureAccountManager.registerForPushNotifications(pushToken: pushToken,
+                                                                       voipToken: voipToken,
+                                                                       success: fulfill,
+                                                                       failure: reject)
         }
     }
 
     func registerForManualMessageFetching() -> Promise<Void> {
         return Promise { fulfill, reject in
-            self.textSecureAccountManager.registerForManualMessageFetching(success:fulfill, failure:reject)
+            self.textSecureAccountManager.registerForManualMessageFetching(success: fulfill, failure: reject)
         }
     }
 
@@ -112,14 +112,14 @@ class AccountManager: NSObject {
 
     func getTurnServerInfo() -> Promise<TurnServerInfo> {
         return Promise { fulfill, reject in
-            self.networkManager.makeRequest(TurnServerInfoRequest(),
+            self.networkManager.makeRequest(OWSRequestFactory.turnServerInfoRequest(),
                                             success: { (_: URLSessionDataTask, responseObject: Any?) in
                                                 guard responseObject != nil else {
                                                     return reject(OWSErrorMakeUnableToProcessServerResponseError())
                                                 }
 
                                                 if let responseDictionary = responseObject as? [String: AnyObject] {
-                                                    if let turnServerInfo = TurnServerInfo(attributes:responseDictionary) {
+                                                    if let turnServerInfo = TurnServerInfo(attributes: responseDictionary) {
                                                         return fulfill(turnServerInfo)
                                                     }
                                                     Logger.error("\(self.TAG) unexpected server response:\(responseDictionary)")
