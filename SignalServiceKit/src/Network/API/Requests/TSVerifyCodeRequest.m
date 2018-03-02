@@ -18,16 +18,13 @@
     OWSAssert(signalingKey.length > 0);
     OWSAssert(authKey.length > 0);
 
-    self = [super
-        initWithURL:[NSURL URLWithString:[NSString
-                                             stringWithFormat:@"%@/code/%@", textSecureAccountsAPI, verificationCode]]];
+    NSURL *url =
+        [NSURL URLWithString:[NSString stringWithFormat:@"%@/code/%@", textSecureAccountsAPI, verificationCode]];
+    NSDictionary<NSString *, id> *parameters =
+        [TSAttributes attributesWithSignalingKey:signalingKey serverAuthToken:authKey manualMessageFetching:NO];
+    self = [super initWithURL:url method:@"PUT" parameters:parameters];
 
     _numberToValidate = phoneNumber;
-
-    self.parameters =
-        [TSAttributes attributesWithSignalingKey:signalingKey serverAuthToken:authKey manualMessageFetching:NO];
-
-    [self setHTTPMethod:@"PUT"];
 
     return self;
 }
