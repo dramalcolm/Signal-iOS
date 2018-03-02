@@ -983,11 +983,10 @@ NSString *const OWSMessageSenderRateLimitedException = @"RateLimitedException";
         OWSAssert(deviceMessages.count > 0);
     }
 
-    TSSubmitMessageRequest *request = [[TSSubmitMessageRequest alloc] initWithRecipient:recipient.uniqueId
-                                                                               messages:deviceMessages
-                                                                                  relay:recipient.relay
-                                                                              timeStamp:message.timestamp];
-
+    TSRequest *request = [OWSRequestFactory submitMessageRequestWithRecipient:recipient.uniqueId
+                                                                     messages:deviceMessages
+                                                                        relay:recipient.relay
+                                                                    timeStamp:message.timestamp];
     [self.networkManager makeRequest:request
         success:^(NSURLSessionDataTask *task, id responseObject) {
             dispatch_async([OWSDispatch sendingQueue], ^{
